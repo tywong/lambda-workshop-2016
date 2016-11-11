@@ -1,0 +1,24 @@
+service: s3-example
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+
+functions:
+  hello:
+    description: Detect upload to S3
+    memorySize: 1024
+    timeout: 30
+    handler: handler.hello
+    events:
+      - s3:
+          bucket: mole-workshop-bucket
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+            - suffix: .jpg
+
+resources:
+  Resources:
+    S3BucketTestingBucket:
+      Type: AWS::S3::Bucket
